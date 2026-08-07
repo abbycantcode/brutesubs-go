@@ -2,7 +2,7 @@
 
 Streaming DNS subdomain candidate generation and resolution orchestration for large wordlists.
 
-`brutesubs` combines a memory-efficient `subgen`-compatible stream with a batch workflow that:
+`brutesubs` provides a memory-efficient `subgen`-compatible stream and a batch workflow that:
 
 1. Cleans and optionally deduplicates a wordlist.
 2. Generates candidate subdomains for each root domain.
@@ -10,6 +10,12 @@ Streaming DNS subdomain candidate generation and resolution orchestration for la
 4. Removes intermediate candidate files after successful resolution.
 
 The generator processes wordlists line by line instead of storing the complete input in memory, making it suitable for very large wordlists.
+
+## Background
+
+This project originated from a workflow built around [`subgen`](https://github.com/pry0cc/subgen) for candidate generation followed by [`puredns`](https://github.com/d3mondev/puredns) resolution using trusted public resolver lists. That workflow is useful, but holding very large wordlists in memory can make the original generator impractical. In addition, `puredns bruteforce` is not always as fast or reliable as a dedicated streaming generation stage for large wordlists and may encounter errors depending on the input and environment.
+
+`brutesubs` keeps the same useful pipeline while separating the stages: stream candidate generation with bounded memory, then resolve the generated candidates with `puredns`. The batch mode also removes completed intermediate files so large candidate lists do not accumulate on disk.
 
 ## Features
 
@@ -196,6 +202,20 @@ Remove local build and workflow artifacts:
 ```bash
 make clean
 ```
+
+## Credits and sources
+
+`brutesubs` builds on the following projects, datasets, and resolver resources:
+
+- **subgen** — the original candidate-generation idea and command-line workflow: [github.com/pry0cc/subgen](https://github.com/pry0cc/subgen)
+- **puredns** — candidate resolution and DNS bruteforce tooling: [github.com/d3mondev/puredns](https://github.com/d3mondev/puredns)
+- **Trickest subdomain bruteforce list** — the large all-subdomain wordlist used as a source for this workflow: [all.txt.zip](https://localdomain.pw/subdomain-bruteforce-list/all.txt.zip)
+- **Trickest trusted resolvers** — curated trusted resolver list: [resolvers-trusted.txt](https://raw.githubusercontent.com/trickest/resolvers/main/resolvers-trusted.txt)
+- **Trickest resolver list** — broader resolver list: [resolvers.txt](https://raw.githubusercontent.com/trickest/resolvers/main/resolvers.txt)
+- **Assetnote best DNS wordlist** — a commonly used DNS discovery wordlist: [best-dns-wordlist.txt](https://wordlists-cdn.assetnote.io/data/manual/best-dns-wordlist.txt)
+- **Assetnote wordlists** — automatically generated and maintained wordlists: [wordlists.assetnote.io](https://wordlists.assetnote.io/)
+
+These resources are maintained by their respective authors and organizations. Review and comply with each source's license and usage terms.
 
 ## Authorized use
 
