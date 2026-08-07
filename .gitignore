@@ -1,0 +1,18 @@
+# Command Code metadata
+.commandcode/
+
+# Local caches and temporary files
+.cache/
+*.tmp
+*.temp
+
+# Generated workflow output
+to-brute/
+resolved/
+
+# Local build artifacts
+/brutesubs
+/brutesubs-race
+
+# Operating system files
+.DS_Store
